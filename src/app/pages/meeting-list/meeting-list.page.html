@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'/club/' + clubId + '/books'"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ club?.name }} Meetings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-list *ngIf="!loading && meetings.length; else empty">
+    <ion-item button *ngFor="let meeting of meetings" (click)="openMeeting(meeting)">
+      <ion-thumbnail slot="start" *ngIf="meeting.bookId">
+        <img *ngIf="meeting.bookCoverImagePath; else noCover" [src]="meeting.bookCoverImagePath" [alt]="meeting.bookTitle" />
+        <ng-template #noCover>
+          <div class="cover-placeholder">
+            <ion-icon name="book-outline"></ion-icon>
+          </div>
+        </ng-template>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ meeting.date | date: 'medium' }}</h2>
+        <p *ngIf="meeting.location">{{ meeting.location }}</p>
+        <p *ngIf="meeting.bookTitle">Discussing: {{ meeting.bookTitle }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #empty>
+  <div class="ion-text-center ion-padding" *ngIf="!loading">
+    <p>No meetings scheduled yet.</p>
+  </div>
+</ng-template>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button [routerLink]="['/club', clubId, 'meetings', 'new']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+
+  <ion-tab-button routerLink="/club-list">
+    <ion-icon name="book-outline"></ion-icon>
+    <ion-label>Clubs</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/meetings">
+    <ion-icon name="calendar-outline"></ion-icon>
+    <ion-label>Meetings</ion-label>
+  </ion-tab-button>
+  <ion-tab-button routerLink="/books">
+    <ion-icon name="library-outline"></ion-icon>
+    <ion-label>Books</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/want-to-read">
+    <ion-icon name="bookmark-outline"></ion-icon>
+    <ion-label>Want to Read</ion-label>
+  </ion-tab-button>
+
+    <ion-tab-button routerLink="/settings">
+    <ion-icon name="options-outline"></ion-icon>
+    <ion-label>Settings</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>

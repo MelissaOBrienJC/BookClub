@@ -1,0 +1,7 @@
+{
+  "name": "book-club-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

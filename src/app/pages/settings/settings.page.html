@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item lines="full">
+      <ion-label>
+        <h2>Data Backup</h2>
+
+        <p>
+          Save a copy of your clubs, books, meetings, and book covers.
+        </p>
+
+        <p *ngIf="lastBackupDate">
+          Last backup:
+          {{ lastBackupDate | date:'MMM d, y, h:mm a' }}
+        </p>
+
+        <p *ngIf="!lastBackupDate">
+          You haven't created a backup yet.
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-button expand="block" (click)="exportData()">
+        Export My Data
+      </ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-button
+        expand="block"
+        fill="outline"
+        (click)="openImportFile()"
+        [disabled]="importing">
+        Import Data
+      </ion-button>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label>
+        <h2>Delete Data</h2>
+
+        <p>
+          Permanently remove all Book Club data from this device.
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-button
+        expand="block"
+        color="danger"
+        (click)="confirmDeleteAllData()">
+        Delete All Book Club Data
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+
+  <ion-tab-button routerLink="/club-list">
+    <ion-icon name="book-outline"></ion-icon>
+    <ion-label>Clubs</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/meetings">
+    <ion-icon name="calendar-outline"></ion-icon>
+    <ion-label>Meetings</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/books">
+    <ion-icon name="library-outline"></ion-icon>
+    <ion-label>Books</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/want-to-read">
+    <ion-icon name="bookmark-outline"></ion-icon>
+    <ion-label>Want to Read</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/settings">
+    <ion-icon name="options-outline"></ion-icon>
+    <ion-label>Settings</ion-label>
+  </ion-tab-button>
+
+</ion-tab-bar>

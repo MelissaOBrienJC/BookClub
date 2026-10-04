@@ -1,0 +1,28 @@
+
+<ion-header>
+  <ion-toolbar>
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/meetings"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Select Club</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div *ngFor="let club of clubs" class="ion-padding">
+
+    <button
+  type="button"
+  class="select-club-button"
+  (click)="selectClub(club)">
+  {{ club.name }}
+</button>
+
+  </div>
+
+</ion-content>
+

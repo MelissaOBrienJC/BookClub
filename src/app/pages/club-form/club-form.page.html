@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>{{ isEdit ? 'Edit Club' : 'New Club' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button strong="true" (click)="save()" [disabled]="form.invalid">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form">
+    <ion-item>
+      <ion-label position="stacked">Club Name *</ion-label>
+      <ion-input formControlName="name" placeholder="e.g. Tuesday Night Readers"></ion-input>
+    </ion-item>
+    <ion-note color="danger" *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
+      Club name is required.
+    </ion-note>
+
+    <ion-item lines="none">
+      <ion-label position="stacked">Description</ion-label>
+      <ion-textarea
+        formControlName="description"
+        autoGrow="true"
+        placeholder="Optional notes about this club"
+      ></ion-textarea>
+    </ion-item>
+  </form>
+</ion-content>

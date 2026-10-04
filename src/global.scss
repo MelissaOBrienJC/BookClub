@@ -1,0 +1,312 @@
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+
+/* =========================================
+   GENERAL APP STYLES
+   ========================================= */
+
+:root {
+  --ion-font-family: 'Roboto', sans-serif !important;
+  --ion-background-color: #faf8f5 !important;
+  --ion-color-primary: #f1641e !important;
+}
+
+
+/* App-wide content colors */
+ion-content {
+  --background: #faf8f5 !important;
+  --color: #312b36 !important;
+}
+
+ion-back-button {
+  --icon-font-size: 20px;
+  font-size: 14px;
+}
+/* =========================================
+   BOOK COVER PLACEHOLDER
+   ========================================= */
+
+.cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ion-color-light);
+  color: var(--ion-color-medium);
+  font-size: 1.5rem;
+}
+
+
+/* =========================================
+   RATING / STARS
+   ========================================= */
+
+.star-picker {
+  display: flex;
+  gap: 4px;
+  font-size: 1.75rem;
+  color: #ff9500;
+}
+
+.rating-control {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rating-value {
+  margin-left: 8px;
+  color: var(--ion-color-medium);
+  font-size: 0.9rem;
+}
+
+/* Filled and half-filled stars */
+.star-picker ion-icon[name="star"],
+.star-picker ion-icon[name="star-half"] {
+  color: #ff9500;
+}
+
+/* Empty stars */
+.star-picker ion-icon[name="star-outline"] {
+  color: var(--ion-color-medium);
+}
+
+/* =========================================
+   COMPACT LIST STYLING
+   ========================================= */
+
+/* Make list rows slightly more compact */
+ion-list ion-item {
+  --min-height: 42px;
+}
+
+
+/* List titles */
+ion-list ion-item ion-label h2 {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  line-height: 1.15 !important;
+  margin: 0 !important;
+}
+
+
+/* List secondary information */
+ion-list ion-item ion-label p {
+  font-size: 0.7rem !important;
+  line-height: 1.15 !important;
+  margin: 3px 0 0 0 !important;
+}
+
+
+/* Page count, due date, publisher, etc. */
+ion-list ion-item ion-label ion-note {
+  font-size: 0.7rem !important;
+  line-height: 1.15 !important;
+  color: var(--ion-color-medium) !important;
+}
+
+
+/* =========================================
+   FORM TYPOGRAPHY
+   ========================================= */
+
+/* Stacked form labels */
+ion-item ion-label[position="stacked"] {
+  font-size: 0.7rem !important;
+  line-height: 1.15 !important;
+}
+
+
+/* Text entered into form fields */
+ion-item ion-input,
+ion-item ion-textarea,
+ion-item ion-select {
+  font-size: 0.75rem !important;
+}
+
+
+/* Native input / textarea text */
+ion-item ion-input::part(native),
+ion-item ion-textarea::part(native) {
+  font-size: 0.75rem !important;
+}
+ion-toolbar ion-title {
+  font-size:  1rem !important;
+}
+
+.empty-message {
+  font-size: 0.85rem;
+  color: var(--ion-color-medium);
+}
+
+.empty-message p {
+  margin: 0;
+}
+
+/* Form placeholders */
+ion-item ion-input::part(native)::placeholder,
+ion-item ion-textarea::part(native)::placeholder {
+  font-size: 0.7rem !important;
+}
+
+ion-button {
+  font-size: 0.75rem !important;
+}
+
+ion-item ion-badge {
+  font-size: 0.7rem !important;
+  padding: 4px 7px !important;
+}
+
+.rating-control .star-picker ion-icon {
+  font-size: 1.2rem !important;
+}
+
+ion-segment-button {
+  font-size: 0.75rem !important;
+  min-height: 36px !important;
+}
+
+
+/* =========================================
+   TEXT ENTRY FIELDS
+   White field, light grey border, orange
+   highlight while typing
+   ========================================= */
+
+/* Rows that hold a text field: let the cream page show through
+   (so the white field stands out) and drop Ionic's underline. */
+ion-item:has(> ion-input),
+ion-item:has(> ion-textarea) {
+  --background: transparent;
+  --border-color: transparent;
+  --highlight-height: 0;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+}
+
+/* The fields themselves */
+ion-item ion-input,
+ion-item ion-textarea {
+  --background: #ffffff;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+
+  background: #ffffff;
+  border: 1px solid #d6d3d1;
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin-top: 8px;
+  min-height: 44px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Single-line inputs (Publisher, Number of Pages, Search):
+   the padding goes on the native input element itself, with !important,
+   because Ionic's own item styles override the padding variables. */
+ion-item ion-input {
+  --padding-start: 16px !important;
+  --padding-end: 16px !important;
+}
+
+ion-item ion-input .native-input {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+/* Multi-line fields (Review, Notes, Summary) */
+ion-item ion-textarea {
+  --padding-start: 0;
+  --padding-end: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Highlight the field being edited (uses your #f1641e orange) */
+ion-item ion-input:focus-within,
+ion-item ion-textarea:focus-within {
+  border-color: var(--ion-color-primary);
+  box-shadow: 0 0 0 3px rgba(241, 100, 30, 0.15);
+}
+
+/* Optional: makes a read-only field look locked.
+   Add class="readonly-field" to the textarea to use it. */
+ion-item ion-textarea.readonly-field {
+  --background: #f5f3f0;
+  background: #f5f3f0;
+  color: var(--ion-color-medium);
+}
+
+
+.select-club-button {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  background: #ffffff;
+  color: #312b36;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
+}
+/* Date/time buttons */
+ion-datetime-button {
+  font-size: 0.75rem !important;
+}
+
+ion-datetime-button::part(native) {
+  font-size: 0.75rem !important;
+}
+
+
+.add-book-intro {
+  margin: 8px 4px 16px;
+
+  h2 {
+    margin: 0 0 6px;
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: var(--ion-color-medium);
+    font-size: 0.95rem;
+  }
+}
+
+.book-search-item {
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  --border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.search-results-header {
+  margin: 20px 4px 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+}
+
+.search-error {
+  margin-top: 8px;
+}
+
+
+/* iPhone: give the form extra room above the keyboard */
+@supports (-webkit-touch-callout: none) {
+  ion-content {
+    --padding-bottom: 100px;
+  }
+}

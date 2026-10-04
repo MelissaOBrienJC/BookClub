@@ -1,0 +1,10 @@
+{
+  "/book-cover-proxy": {
+    "target": "https://books.google.com",
+    "changeOrigin": true,
+    "secure": true,
+    "pathRewrite": {
+      "^/book-cover-proxy": ""
+    }
+  }
+}

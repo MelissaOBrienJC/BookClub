@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>{{ isEdit ? 'Edit Meeting' : 'Schedule Meeting' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button strong="true" (click)="save()" [disabled]="form.invalid">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form">
+    <ion-item>
+      <ion-label position="stacked">Date &amp; Time *</ion-label>
+      <ion-datetime-button datetime="meetingDate"></ion-datetime-button>
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime id="meetingDate" formControlName="date" presentation="date-time"></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Location</ion-label>
+      <ion-input formControlName="location" placeholder="e.g. Marian's house, or a video call link"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Book Being Discussed</ion-label>
+      <ion-select formControlName="bookId" interface="popover" placeholder="Optional">
+        <ion-select-option [value]="null">None</ion-select-option>
+        <ion-select-option *ngFor="let book of clubBooks" [value]="book.id">
+          {{ book.title }}
+        </ion-select-option>
+           
+      </ion-select>
+        <ion-button
+    slot="end"
+    fill="clear"
+    size="small"
+    (click)="addBook()"
+    aria-label="Add a new book">
+
+    <ion-icon
+      name="add-outline"
+      slot="start">
+    </ion-icon>
+
+    Add
+  </ion-button>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label position="stacked">Notes</ion-label>
+      <ion-textarea formControlName="notes" autoGrow="true" placeholder="Agenda, questions to discuss, etc."></ion-textarea>
+    </ion-item>
+  </form>
+
+  <ion-button *ngIf="isEdit" expand="block" color="danger" fill="outline" (click)="delete()">
+    Cancel Meeting
+  </ion-button>
+</ion-content>

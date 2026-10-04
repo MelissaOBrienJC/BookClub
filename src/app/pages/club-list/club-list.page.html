@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Book Clubs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  
+
+  <ion-list *ngIf="!loading && clubs.length; else empty">
+
+  <ion-item-sliding *ngFor="let club of clubs">
+
+    <ion-item button (click)="openBooks(club)">
+
+      <ion-label>
+        <h2>{{ club.name }}</h2>
+
+        <p *ngIf="club.description">
+          {{ club.description }}
+        </p>
+      </ion-label>
+
+      <ion-button
+        slot="end"
+        fill="clear"
+        (click)="openBooks(club); $event.stopPropagation()">
+        Books
+      </ion-button>
+
+    </ion-item>
+
+    <ion-item-options side="end">
+
+      <ion-item-option
+        color="medium"
+        (click)="editClub(club)">
+        Edit
+      </ion-item-option>
+
+      <ion-item-option
+        color="danger"
+        (click)="deleteClub(club)">
+        Delete
+      </ion-item-option>
+
+    </ion-item-options>
+
+  </ion-item-sliding>
+
+</ion-list>
+
+  <ng-template #empty>
+  <div class="ion-text-center ion-padding" *ngIf="!loading">
+    <p>No book clubs yet. Create your first one below.</p>
+  </div>
+</ng-template>
+
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed">
+
+    <ion-fab-button routerLink="/club-form">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+
+  </ion-fab>
+
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+
+  <ion-tab-button routerLink="/club-list">
+    <ion-icon name="book-outline"></ion-icon>
+    <ion-label>Clubs</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/meetings">
+    <ion-icon name="calendar-outline"></ion-icon>
+    <ion-label>Meetings</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/books">
+    <ion-icon name="library-outline"></ion-icon>
+    <ion-label>Books</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/want-to-read">
+    <ion-icon name="bookmark-outline"></ion-icon>
+    <ion-label>Want to Read</ion-label>
+  </ion-tab-button>
+
+<ion-tab-button routerLink="/settings">
+    <ion-icon name="options-outline"></ion-icon>
+    <ion-label>Settings</ion-label>
+  </ion-tab-button>
+
+</ion-tab-bar>

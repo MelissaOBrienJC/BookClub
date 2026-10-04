@@ -1,0 +1,277 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Books</ion-title>
+
+
+<ion-buttons slot="end">
+  <ion-button (click)="openFilters()">
+    <ion-icon name="options-outline"></ion-icon>
+    <ion-label>Filter</ion-label>
+  </ion-button>
+</ion-buttons>
+
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Search stays visible -->
+
+  <ion-item>
+    <ion-label position="stacked">Search</ion-label>
+    <ion-input
+      [(ngModel)]="searchText"
+      (ionInput)="applyFilters()"
+      placeholder="Title or author"
+      clearInput="true">
+    </ion-input>
+  </ion-item>
+
+  <!-- Results -->
+
+<ion-list *ngIf="!loading && books.length; else empty">
+<ion-item
+button
+*ngFor="let book of books"
+(click)="openBook(book)">
+
+
+  <ion-thumbnail slot="start">
+    <img
+      *ngIf="book.coverImagePath; else noCover"
+      [src]="book.coverImagePath"
+      [alt]="book.title">
+
+    <ng-template #noCover>
+      <div class="cover-placeholder">
+        <ion-icon name="book-outline"></ion-icon>
+      </div>
+    </ng-template>
+  </ion-thumbnail>
+
+  <ion-label>
+    <h2>{{ book.title }}</h2>
+
+    <p *ngIf="book.author">
+      {{ book.author }}
+    </p>
+
+  <p class="star-picker" style="font-size: 1rem;">
+  <ion-icon
+    *ngFor="let star of starArray(book.rating)"
+    [name]="star">
+  </ion-icon>
+</p>
+  </ion-label>
+
+</ion-item>
+
+
+  </ion-list>
+<ng-template #empty> <div class="ion-text-center ion-padding">
+<p *ngIf="hasFilters(); else noBooks">
+No books match your filters. </p>
+
+
+  <ng-template #noBooks>
+    <p>No books found.</p>
+  </ng-template>
+</div>
+
+
+  </ng-template>
+
+</ion-content>
+
+<!-- Filter modal -->
+
+<ion-modal
+[isOpen]="filterModalOpen"
+(didDismiss)="closeFilters()">
+
+  <ng-template>
+
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Filters</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="closeFilters()">
+        Done
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item>
+    <ion-label>Club</ion-label>
+
+    <ion-select
+      [(ngModel)]="selectedClubId"
+      interface="popover">
+
+      <ion-select-option value="">
+        All Clubs
+      </ion-select-option>
+
+      <ion-select-option
+        *ngFor="let club of clubs"
+        [value]="club.id">
+
+        {{ club.name }}
+
+      </ion-select-option>
+
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Status</ion-label>
+
+    <ion-select
+      [(ngModel)]="selectedStatus"
+      interface="popover">
+
+      <ion-select-option value="">
+        All Statuses
+      </ion-select-option>
+
+      <ion-select-option value="not_started">
+        Not Started
+      </ion-select-option>
+
+      <ion-select-option value="started">
+        Reading
+      </ion-select-option>
+
+      <ion-select-option value="read">
+        Read
+      </ion-select-option>
+
+      <ion-select-option value="skip">
+        Skip
+      </ion-select-option>
+
+    </ion-select>
+  </ion-item>
+<ion-item>
+  <ion-label>Want to Read</ion-label>
+
+  <ion-select
+    [(ngModel)]="selectedWantToRead"
+    interface="popover">
+
+    <ion-select-option value="yes">
+      Want to Read
+    </ion-select-option>
+
+    <ion-select-option value="no">
+      Not Want to Read
+    </ion-select-option>
+
+    <ion-select-option value="all">
+      All Books
+    </ion-select-option>
+
+  </ion-select>
+</ion-item>
+  <ion-item>
+    <ion-label>Minimum Rating</ion-label>
+
+    <ion-select
+      [(ngModel)]="minimumRating"
+      interface="popover">
+
+      <ion-select-option value="">
+        Any Rating
+      </ion-select-option>
+
+      <ion-select-option value="1">
+        1+ Stars
+      </ion-select-option>
+
+      <ion-select-option value="2">
+        2+ Stars
+      </ion-select-option>
+
+      <ion-select-option value="3">
+        3+ Stars
+      </ion-select-option>
+
+      <ion-select-option value="4">
+        4+ Stars
+      </ion-select-option>
+
+      <ion-select-option value="5">
+        5 Stars
+      </ion-select-option>
+
+    </ion-select>
+  </ion-item>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+
+    <ion-button
+      expand="block"
+      fill="outline"
+      (click)="clearFilters()">
+
+      Clear Filters
+
+    </ion-button>
+
+    <ion-button
+      expand="block"
+      (click)="applyAndCloseFilters()">
+
+      Apply Filters
+
+    </ion-button>
+
+  </ion-toolbar>
+</ion-footer>
+
+
+  </ng-template>
+</ion-modal>
+
+<!-- Bottom navigation -->
+
+
+    <ion-footer>
+  <ion-tab-bar>
+
+  <ion-tab-button routerLink="/club-list">
+    <ion-icon name="book-outline"></ion-icon>
+    <ion-label>Clubs</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/meetings">
+    <ion-icon name="calendar-outline"></ion-icon>
+    <ion-label>Meetings</ion-label>
+  </ion-tab-button>
+
+   <ion-tab-button routerLink="/books">
+    <ion-icon name="library-outline"></ion-icon>
+    <ion-label>Books</ion-label>
+  </ion-tab-button>
+
+
+  <ion-tab-button routerLink="/want-to-read">
+    <ion-icon name="bookmark-outline"></ion-icon>
+    <ion-label>Want to Read</ion-label>
+  </ion-tab-button>
+  <ion-tab-button routerLink="/settings">
+    <ion-icon name="options-outline"></ion-icon>
+    <ion-label>Settings</ion-label>
+  </ion-tab-button>
+ 
+  </ion-tab-bar>
+</ion-footer>

@@ -1,0 +1,385 @@
+
+<ion-header>
+  <ion-toolbar>
+
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+      {{ isEdit ? 'Edit Book' : 'Add Book' }}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button
+        strong="true"
+        (click)="save()"
+        [disabled]="!canSave || saving">
+        Save
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Loading existing book -->
+  <div
+    *ngIf="loading"
+    style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    ">
+
+    <ion-spinner name="crescent"></ion-spinner>
+
+  </div>
+
+  <!-- Form only appears after loading is complete -->
+  <ng-container *ngIf="!loading">
+
+    <!-- Google Books search: new books only -->
+    <ng-container *ngIf="!isEdit">
+
+      <ion-item>
+        <ion-label position="stacked">
+          Search by title or ISBN
+        </ion-label>
+
+        <ion-input
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="search()"
+          placeholder="Enter book title or ISBN here">
+        </ion-input>
+
+        <ion-text color="danger" *ngIf="searchError">
+          <p class="search-error">
+            {{ searchError }}
+          </p>
+        </ion-text>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        fill="outline"
+        (click)="search()"
+        [disabled]="searching">
+
+        <ion-spinner
+          *ngIf="searching"
+          name="dots">
+        </ion-spinner>
+
+        <span *ngIf="!searching">
+          Search Google Books
+        </span>
+
+      </ion-button>
+
+      <ion-list *ngIf="searchResults.length">
+
+        <ion-item
+          button
+          *ngFor="let result of searchResults"
+          (click)="selectResult(result)">
+
+          <ion-thumbnail slot="start">
+            <img
+              *ngIf="result.thumbnailUrl"
+              [src]="result.thumbnailUrl"
+              [alt]="result.title">
+          </ion-thumbnail>
+
+          <ion-label>
+            <h2>{{ result.title }}</h2>
+
+            <p *ngIf="result.author">
+              {{ result.author }}
+            </p>
+          </ion-label>
+
+        </ion-item>
+
+      </ion-list>
+
+      <ion-item
+        *ngIf="selectedResult"
+        lines="none"
+        class="ion-margin-top">
+
+        <ion-thumbnail slot="start">
+          <img
+            *ngIf="selectedResult.thumbnailUrl"
+            [src]="selectedResult.thumbnailUrl"
+            [alt]="selectedResult.title">
+        </ion-thumbnail>
+
+        <ion-label>
+          <h2>{{ selectedResult.title }}</h2>
+
+          <p *ngIf="selectedResult.author">
+            {{ selectedResult.author }}
+          </p>
+
+          <p>
+            <ion-note>
+              Selected
+            </ion-note>
+          </p>
+        </ion-label>
+
+      </ion-item>
+
+    </ng-container>
+
+    <!-- Existing book being edited -->
+         <ion-item
+  *ngIf="!loading && isEdit && book"
+  lines="none">
+
+      <ion-thumbnail slot="start">
+        <img
+          *ngIf="book.coverImagePath"
+          [src]="book.coverImagePath"
+          [alt]="book.title">
+      </ion-thumbnail>
+
+      <ion-label>
+        <h2>{{ book.title }}</h2>
+
+        <p *ngIf="book.author">
+          {{ book.author }}
+        </p>
+      </ion-label>
+
+    </ion-item>
+
+    <!-- Book details -->
+   
+
+      <ng-container *ngIf="!loading && (isEdit && book || selectedResult)">
+
+      <!-- Publisher -->
+      <ion-item>
+        <ion-label position="stacked">
+          Publisher
+        </ion-label>
+
+        <ion-input
+          [(ngModel)]="publisher"
+          placeholder="e.g. Penguin Random House">
+        </ion-input>
+      </ion-item>
+
+      <!-- Page count -->
+      <ion-item>
+        <ion-label position="stacked">
+          Number of Pages
+        </ion-label>
+
+        <ion-input
+          type="number"
+          inputmode="numeric"
+          [(ngModel)]="pageCount"
+          placeholder="e.g. 320">
+        </ion-input>
+      </ion-item>
+
+      <!-- Publisher summary -->
+      <ion-item
+        *ngIf="publisherSummary"
+        lines="none">
+
+        <ion-label position="stacked">
+          Summary from Publisher
+        </ion-label>
+
+        <ion-textarea
+          class="readonly-field"
+          [(ngModel)]="publisherSummary"
+          [readonly]="true"
+          autoGrow="true">
+        </ion-textarea>
+
+      </ion-item>
+
+      <!-- Status -->
+      <ion-item lines="none">
+
+        <ion-label position="stacked">
+          Status
+        </ion-label>
+
+        <ion-segment
+          [value]="status"
+          (ionChange)="statusChanged($event)"
+          scrollable="true">
+
+          <ion-segment-button value="not_started">
+            <ion-label>
+              Not Started
+            </ion-label>
+          </ion-segment-button>
+
+          <ion-segment-button value="started">
+            <ion-label>
+              Reading
+            </ion-label>
+          </ion-segment-button>
+
+          <ion-segment-button value="read">
+            <ion-label>
+              Read
+            </ion-label>
+          </ion-segment-button>
+
+          <ion-segment-button value="skip">
+            <ion-label>
+              Skip
+            </ion-label>
+          </ion-segment-button>
+
+        </ion-segment>
+
+      </ion-item>
+
+      <!-- Due date -->
+      <ion-item>
+
+        <ion-label position="stacked">
+          Due Date
+        </ion-label>
+
+        <ion-datetime-button
+          datetime="dueDateInput">
+        </ion-datetime-button>
+
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+
+            <ion-datetime
+              id="dueDateInput"
+              [value]="dueDate"
+              (ionChange)="dueDateChanged($event)"
+              presentation="date">
+            </ion-datetime>
+
+          </ng-template>
+        </ion-modal>
+
+      </ion-item>
+
+      <!-- Rating -->
+      <ion-item
+        lines="none"
+        [disabled]="status === 'not_started'">
+
+        <ion-label position="stacked">
+          Rating
+          <span *ngIf="status === 'not_started'">
+            (available after you start reading)
+          </span>
+        </ion-label>
+
+        <div class="rating-control">
+
+          <ion-button
+            fill="clear"
+            size="small"
+            (click)="decrementRating()"
+            [disabled]="!rating || status === 'not_started'">
+
+            <ion-icon
+              slot="icon-only"
+              name="remove-circle-outline">
+            </ion-icon>
+
+          </ion-button>
+
+          <div class="star-picker">
+
+            <ion-icon
+              *ngFor="let star of ratingStars"
+              [name]="star">
+            </ion-icon>
+
+          </div>
+
+          <ion-button
+            fill="clear"
+            size="small"
+            (click)="incrementRating()"
+            [disabled]="rating === 5 || status === 'not_started'">
+
+            <ion-icon
+              slot="icon-only"
+              name="add-circle-outline">
+            </ion-icon>
+
+          </ion-button>
+
+          <span
+            class="rating-value"
+            *ngIf="rating">
+
+            {{ rating }} / 5
+
+          </span>
+
+        </div>
+
+      </ion-item>
+
+      <!-- Review -->
+      <ion-item lines="none">
+
+        <ion-label position="stacked">
+          Your Review
+        </ion-label>
+
+        <ion-textarea
+          [(ngModel)]="review"
+          autoGrow="true"
+          placeholder="What did you think?">
+        </ion-textarea>
+
+      </ion-item>
+
+      <!-- Notes -->
+      <ion-item lines="none">
+
+        <ion-label position="stacked">
+          Book Club Notes
+        </ion-label>
+
+        <ion-textarea
+          [(ngModel)]="notes"
+          autoGrow="true"
+          placeholder="Discussion notes, quotes to bring up, etc.">
+        </ion-textarea>
+
+      </ion-item>
+
+      <!-- Delete -->
+      <ion-button
+        *ngIf="isEdit"
+        expand="block"
+        color="danger"
+        fill="outline"
+        (click)="delete()">
+
+        Remove Book
+
+      </ion-button>
+
+    </ng-container>
+
+  </ng-container>
+
+</ion-content>
+

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Book Club</string>
+    <string name="title_activity_main">Book Club</string>
+    <string name="package_name">org.mobdemo.bookclub</string>
+    <string name="custom_url_scheme">org.mobdemo.bookclub</string>
+</resources>

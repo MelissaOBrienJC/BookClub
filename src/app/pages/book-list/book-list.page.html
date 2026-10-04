@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/club-list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ club?.name || 'Books' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/club', clubId, 'meetings']">Meetings</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list *ngIf="!loading && books.length; else empty">
+
+    <ion-item button *ngFor="let book of books" (click)="openBook(book)">
+      <ion-thumbnail slot="start">
+        <img *ngIf="book.coverImagePath; else noCover" [src]="book.coverImagePath" [alt]="book.title" />
+        <ng-template #noCover>
+          <div class="cover-placeholder">
+            <ion-icon name="book-outline"></ion-icon>
+          </div>
+        </ng-template>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ book.title }}</h2>
+        <p *ngIf="book.author">{{ book.author }}</p>
+        <p class="star-picker" style="font-size: 1rem;">
+          <ion-icon *ngFor="let star of starArray(book.rating)" [name]="star"></ion-icon>
+        </p>
+       
+        <p *ngIf="book.dueDate">
+          <ion-note>Due {{ book.dueDate | date: 'mediumDate' }}</ion-note>
+        </p>
+      </ion-label>
+      <ion-badge
+        slot="end"
+        [color]="
+          book.status === 'read' ? 'success' :
+          book.status === 'started' ? 'warning' :
+          book.status === 'skip' ? 'dark' : 'medium'
+        "
+      >
+        {{ statusLabel(book.status) }}
+      </ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #empty>
+  <div class="ion-text-center ion-padding" *ngIf="!loading">
+    <p>No books yet for this club. Add one below.</p>
+  </div>
+</ng-template>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button [routerLink]="['/club', clubId, 'books', 'new']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+
+  <ion-tab-button routerLink="/club-list">
+    <ion-icon name="book-outline"></ion-icon>
+    <ion-label>Clubs</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/meetings">
+    <ion-icon name="calendar-outline"></ion-icon>
+    <ion-label>Meetings</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/books">
+    <ion-icon name="library-outline"></ion-icon>
+    <ion-label>Books</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button routerLink="/want-to-read">
+    <ion-icon name="bookmark-outline"></ion-icon>
+    <ion-label>Want to Read</ion-label>
+  </ion-tab-button>
+  <ion-tab-button routerLink="/settings">
+    <ion-icon name="options-outline"></ion-icon>
+    <ion-label>Settings</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>
